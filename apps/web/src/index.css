@@ -1,0 +1,16 @@
+body { margin: 0; background: #F4F5FA; font-family: 'Readex Pro', system-ui, sans-serif; color: #13122B; }
+* { box-sizing: border-box; }
+button, textarea, input, select { font: inherit; }
+a { color: #4E3CF5; }
+a:hover { color: #2F1FCC; }
+button:disabled { cursor: not-allowed; }
+[hidden] { display: none !important; }
+@media (min-width: 820px) {
+  .side-nav { position: sticky; top: 0; height: 100vh; align-self: flex-start; overflow-y: auto; }
+}
+@media print {
+  .side-nav, .no-print { display: none !important; }
+  body { background: #FFFFFF; }
+}
+@keyframes ithraa-spin { to { transform: rotate(360deg); } }
+@keyframes ithraa-toast { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }

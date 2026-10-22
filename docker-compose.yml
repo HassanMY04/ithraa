@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ithraa
+      POSTGRES_PASSWORD: ithraa
+      POSTGRES_DB: ithraa
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ithraa"]
+      interval: 3s
+      retries: 20
+
+  api:
+    build: ./apps/api
+    environment:
+      ITHRAA_DATABASE_URL: postgresql+psycopg://ithraa:ithraa@db:5432/ithraa
+      ITHRAA_JWT_SECRET: ${ITHRAA_JWT_SECRET:-change-me}
+      ITHRAA_CORS_ORIGINS: http://localhost:8080,http://localhost:5173
+      ITHRAA_UPLOAD_DIR: /data/uploads
+      ITHRAA_DEMO_MODE: ${ITHRAA_DEMO_MODE:-true}
+    volumes:
+      - uploads:/data/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+
+volumes:
+  pgdata:
+  uploads:
